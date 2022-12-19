@@ -18,3 +18,5 @@
 .idea/*
 .projectFilesBackup/
 storage/tmp
+accounts
+.env.local

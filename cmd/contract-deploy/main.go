@@ -19,6 +19,7 @@ type config struct {
 	NetworkURL    string `envconfig:"NETWORK_URL"`
 	OwnerPassword string `envconfig:"OWNER_PASSWORD"`
 	OwnerBalance  int64  `envconfig:"OWNER_BALANCE"`
+	KeyDir        string `envconfig:"KEY_DIR"`
 }
 
 func main() {
@@ -38,7 +39,7 @@ func main() {
 		lgr.WithError(err).Fatal("can't create the client")
 	}
 
-	keyStorage, err := storage.NewKeyStorage("./wallets")
+	keyStorage, err := storage.NewKeyStorage(c.KeyDir)
 	if err != nil {
 		lgr.WithError(err).Fatal("can't create the key storage")
 	}
@@ -50,6 +51,8 @@ func main() {
 	if err != nil {
 		lgr.WithError(err).Fatal("can't create the owner account")
 	}
+
+	lgr.Infof("owner address: %s", owner.Address.Hex())
 
 	ownerKey, err := walletSvc.GetKey(ctx, owner.Address.Hex(), c.OwnerPassword)
 	if err != nil {
@@ -87,9 +90,13 @@ func main() {
 
 	trCost, _ := converter.FromWei(converter.Ether, tr.Cost())
 	lgr.WithFields(logrus.Fields{
+		"owner_addr":       owner.Address.Hex(),
 		"tr_price":         trCost,
 		"tr_hash":          tr.Hash().Hex(),
 		"contract_address": conAddr.Hex(),
 		"chan_id":          chanID,
 	}).Info("contract deployed")
 }
+
+// owner 0x86449faB366E4839487dc969adBaAd9b9b46dc65
+// contract address 0xe67CC61Be70789C548d19c0DedA6B622ccF6A9f1
