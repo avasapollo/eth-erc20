@@ -1,0 +1,35 @@
+syntax = "proto3";
+
+package wallet.v1;
+
+service WalletService {
+  rpc CreateAccount(CreateAccountReq) returns (CreateAccountResp);
+  rpc GetAccount(GetAccountReq) returns (GetAccountResp);
+  rpc ImportAccount(ImportAccountReq) returns (ImportAccountResp);
+}
+
+message CreateAccountReq {
+  string password = 1;
+}
+
+message CreateAccountResp {
+  string address = 1;
+}
+
+message GetAccountReq {
+  string address = 1;
+}
+
+message GetAccountResp {
+  string address = 1;
+}
+
+message ImportAccountReq {
+  bytes key_json = 1;
+  string passphrase = 2;
+  string new_passphrase = 3;
+}
+
+message ImportAccountResp {
+  string address = 1;
+}

@@ -1,0 +1,9 @@
+version: v1
+name: buf.build/avasapollo/eth-erc20
+deps:
+breaking:
+  use:
+    - FILE
+lint:
+  use:
+    - DEFAULT

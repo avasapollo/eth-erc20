@@ -3,10 +3,12 @@ module github.com/avasapollo/eth-erc20
 go 1.19
 
 require (
+	github.com/bufbuild/connect-go v1.4.0
 	github.com/ethereum/go-ethereum v1.10.26
 	github.com/kelseyhightower/envconfig v1.4.0
 	github.com/sirupsen/logrus v1.9.0
 	github.com/stretchr/testify v1.7.2
+	google.golang.org/protobuf v1.28.1
 )
 
 require (

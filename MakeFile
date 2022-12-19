@@ -3,3 +3,11 @@ build-contract:
 
 abigen-contract:
 	abigen --bin=build/NDCoinERC20.bin --abi=build/NDCoinERC20.abi --pkg=erc20 --out=gen/erc20.go
+
+
+buf-mod-update:
+	buf mod update proto
+
+buf: buf-mod-update
+	buf format -w .
+	buf generate proto/
