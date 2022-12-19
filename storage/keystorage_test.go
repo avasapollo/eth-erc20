@@ -5,7 +5,7 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/avasapollo/eth-erc20/wallets"
+	"github.com/avasapollo/eth-erc20/wallet"
 	"github.com/ethereum/go-ethereum/accounts"
 	"github.com/ethereum/go-ethereum/accounts/keystore"
 	"github.com/stretchr/testify/require"
@@ -86,6 +86,30 @@ func TestKeyStorage_GetAccount(t *testing.T) {
 
 		// 0xa1A5B87fEe23dD5ac770cB2E8D6Cf7665d0638c1 not exist
 		_, err := s.GetAccount(ctx, "0xa1A5B87fEe23dD5ac770cB2E8D6Cf7665d0638c1")
-		require.True(t, errors.Is(err, wallets.ErrNotFound))
+		require.True(t, errors.Is(err, wallet.ErrNotFound))
+	})
+}
+
+func TestKeyStorage_GetKey(t *testing.T) {
+	t.Run("ok", func(t *testing.T) {
+		suite := newTestSuite()
+		ctx := context.Background()
+		password := "password"
+
+		s := &KeyStorage{
+			storage: suite.storage,
+		}
+
+		acc, err := s.CreateAccount(ctx, password)
+		if err != nil {
+			t.Fatal(err)
+		}
+
+		key, err := s.GetKey(ctx, acc.Address.Hex(), password)
+		if err != nil {
+			t.Fatal(err)
+		}
+
+		require.NotEmpty(t, key.Id.String())
 	})
 }

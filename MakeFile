@@ -1,0 +1,5 @@
+build-contract:
+	solc --bin --abi contracts/erc20.sol -o build
+
+abigen-contract:
+	abigen --bin=build/NDCoinERC20.bin --abi=build/NDCoinERC20.abi --pkg=erc20 --out=gen/erc20.go
