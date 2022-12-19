@@ -90,11 +90,11 @@ func main() {
 
 	trCost, _ := converter.FromWei(converter.Ether, tr.Cost())
 	lgr.WithFields(logrus.Fields{
-		"owner_addr":       owner.Address.Hex(),
-		"tr_price":         trCost,
-		"tr_hash":          tr.Hash().Hex(),
-		"contract_address": conAddr.Hex(),
-		"chan_id":          chanID,
+		"chan_id":       chanID,
+		"owner_addr":    owner.Address.Hex(),
+		"contract_addr": conAddr.Hex(),
+		"tr_price":      trCost,
+		"tr_hash":       tr.Hash().Hex(),
 	}).Info("contract deployed")
 }
 
