@@ -25,7 +25,7 @@ type config struct {
 func main() {
 	ctx := context.Background()
 	lgr := logrus.New().WithFields(logrus.Fields{
-		"app": "erc20-playground",
+		"app": "contract-deploy",
 	})
 
 	c := new(config)
