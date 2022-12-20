@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package balance.v1;
+
+service BalanceService {
+  rpc GetBalance(GetBalanceReq) returns (GetBalanceResp);
+}
+
+message GetBalanceReq {
+  string address = 1;
+}
+
+message GetBalanceResp {
+  int64 amount = 1;
+}

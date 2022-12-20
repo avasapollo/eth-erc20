@@ -8,6 +8,7 @@ import (
 	"syscall"
 	"time"
 
+	"github.com/avasapollo/eth-erc20/gen/go/balance/v1/balancev1connect"
 	"github.com/avasapollo/eth-erc20/gen/go/transfer/v1/transferv1connect"
 	"github.com/avasapollo/eth-erc20/gen/go/wallet/v1/walletv1connect"
 	"github.com/avasapollo/eth-erc20/handlers"
@@ -23,6 +24,8 @@ import (
 
 type config struct {
 	NetworkURL      string `envconfig:"NETWORK_URL"`
+	OwnerAddress    string `envconfig:"OWNER_ADDRESS"`
+	OwnerPassword   string `envconfig:"OWNER_PASSWORD"`
 	ContractAddress string `envconfig:"CONTRACT_ADDRESS"`
 	KeyDir          string `envconfig:"KEY_DIR"`
 }
@@ -55,15 +58,23 @@ func main() {
 		lgr.WithError(err).Fatal("can't create the client")
 	}
 
-	processorSvc, err := processor.New(common.HexToAddress(c.ContractAddress), client, walletSvc)
+	processorSvc, err := processor.New(
+		common.HexToAddress(c.ContractAddress),
+		common.HexToAddress(c.OwnerAddress),
+		c.OwnerPassword,
+		client,
+		walletSvc,
+	)
 	if err != nil {
 		lgr.WithError(err).Fatal("can't create the processor")
 	}
 	transferHandler := handlers.NewTransferHandler(processorSvc)
+	balanceHandler := handlers.NewBalanceHandler(processorSvc)
 
 	mux := http.NewServeMux()
 	mux.Handle(walletv1connect.NewWalletServiceHandler(walletHandler))
 	mux.Handle(transferv1connect.NewTransferServiceHandler(transferHandler))
+	mux.Handle(balancev1connect.NewBalanceServiceHandler(balanceHandler))
 
 	lis, err := net.Listen("tcp", ":50051")
 	if err != nil {

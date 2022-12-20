@@ -7,10 +7,10 @@ service TransferService {
 }
 
 message TransferReq {
-  string SenderAddress = 1;
-  string SenderPassword = 2;
-  string ReceiverAddress = 3;
-  int64 Amount = 4;
+  string sender_address = 1;
+  string sender_password = 2;
+  string receiver_address = 3;
+  int64 amount = 4;
 }
 
 message TransferResp {

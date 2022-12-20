@@ -9,6 +9,7 @@ import (
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
 	"github.com/ethereum/go-ethereum/accounts/keystore"
 	"github.com/ethereum/go-ethereum/common"
+	"github.com/ethereum/go-ethereum/crypto"
 	"github.com/ethereum/go-ethereum/ethclient"
 )
 
@@ -18,14 +19,16 @@ type Wallet interface {
 }
 
 type Processor struct {
-	ctrAddr   common.Address
-	client    *ethclient.Client
-	ctrClient *erc20.Erc20
-	chanID    *big.Int
-	wallet    Wallet
+	ctrAddr       common.Address
+	ownerAddr     common.Address
+	ownerPassword string
+	client        *ethclient.Client
+	ctrClient     *erc20.Erc20
+	chanID        *big.Int
+	wallet        Wallet
 }
 
-func New(ctrAddr common.Address, cl *ethclient.Client, wallet Wallet) (*Processor, error) {
+func New(ctrAddr, ownerAddress common.Address, ownerPassword string, cl *ethclient.Client, wallet Wallet) (*Processor, error) {
 	ctrClient, err := erc20.NewErc20(ctrAddr, cl)
 	if err != nil {
 		return nil, err
@@ -37,11 +40,13 @@ func New(ctrAddr common.Address, cl *ethclient.Client, wallet Wallet) (*Processo
 	}
 
 	return &Processor{
-		ctrAddr:   ctrAddr,
-		client:    cl,
-		ctrClient: ctrClient,
-		chanID:    chanID,
-		wallet:    wallet,
+		ctrAddr:       ctrAddr,
+		ownerAddr:     ownerAddress,
+		ownerPassword: ownerPassword,
+		client:        cl,
+		ctrClient:     ctrClient,
+		chanID:        chanID,
+		wallet:        wallet,
 	}, nil
 }
 
@@ -86,5 +91,28 @@ func (p *Processor) Transfer(ctx context.Context, req *TransferParams) (*Transfe
 		TransactionHex: tr.Hash().Hex(),
 		SenderAddr:     req.SenderAddr,
 		ReceiverAddr:   req.ReceiverAddr,
+	}, nil
+}
+
+type GetBalanceResult struct {
+	Amount int64
+}
+
+func (p *Processor) GetBalance(ctx context.Context, address string) (*GetBalanceResult, error) {
+	ownerKey, err := p.wallet.GetKey(ctx, p.ownerAddr.Hex(), p.ownerPassword)
+	if err != nil {
+		return nil, err
+	}
+
+	opt := &bind.CallOpts{
+		From: crypto.PubkeyToAddress(ownerKey.PrivateKey.PublicKey),
+	}
+
+	res, err := p.ctrClient.BalanceOf(opt, common.HexToAddress(address))
+	if err != nil {
+		return nil, err
+	}
+	return &GetBalanceResult{
+		Amount: res.Int64(),
 	}, nil
 }
