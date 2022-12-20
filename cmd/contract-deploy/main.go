@@ -17,6 +17,7 @@ import (
 
 type config struct {
 	NetworkURL    string `envconfig:"NETWORK_URL"`
+	OwnerAddress  string `envconfig:"OWNER_ADDRESS"`
 	OwnerPassword string `envconfig:"OWNER_PASSWORD"`
 	OwnerBalance  int64  `envconfig:"OWNER_BALANCE"`
 	KeyDir        string `envconfig:"KEY_DIR"`
@@ -47,9 +48,9 @@ func main() {
 	walletSvc := wallet.New(keyStorage)
 
 	// create contract owner wallet
-	owner, err := walletSvc.CreateAccount(ctx, c.OwnerPassword)
+	owner, err := walletSvc.GetAccount(ctx, c.OwnerAddress)
 	if err != nil {
-		lgr.WithError(err).Fatal("can't create the owner account")
+		lgr.WithError(err).Fatal("can't get the owner account")
 	}
 
 	lgr.Infof("owner address: %s", owner.Address.Hex())
