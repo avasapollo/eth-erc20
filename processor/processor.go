@@ -64,10 +64,7 @@ func (p *Processor) Transfer(ctx context.Context, req *TransferParams) (*Transfe
 		return nil, err
 	}
 
-	receiverAddr, err := p.wallet.GetAccount(ctx, req.ReceiverAddr)
-	if err != nil {
-		return nil, err
-	}
+	receiverAddr := common.HexToAddress(req.ReceiverAddr)
 
 	gasPrice, err := p.client.SuggestGasPrice(ctx)
 	if err != nil {
@@ -81,7 +78,7 @@ func (p *Processor) Transfer(ctx context.Context, req *TransferParams) (*Transfe
 	transactorOpt.GasLimit = 3000000
 	transactorOpt.GasPrice = gasPrice
 
-	tr, err := p.ctrClient.Transfer(transactorOpt, receiverAddr.Address, req.Amount)
+	tr, err := p.ctrClient.Transfer(transactorOpt, receiverAddr, req.Amount)
 	if err != nil {
 		return nil, err
 	}

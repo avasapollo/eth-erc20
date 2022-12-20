@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package transfer.v1;
+
+service TransferService {
+  rpc Transfer(TransferReq) returns (TransferResp);
+}
+
+message TransferReq {
+  string SenderAddress = 1;
+  string SenderPassword = 2;
+  string ReceiverAddress = 3;
+  int64 Amount = 4;
+}
+
+message TransferResp {
+  string address = 1;
+}
