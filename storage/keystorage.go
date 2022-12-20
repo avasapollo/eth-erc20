@@ -2,6 +2,7 @@ package storage
 
 import (
 	"context"
+	"errors"
 	"os"
 
 	"github.com/avasapollo/eth-erc20/wallet"
@@ -35,7 +36,7 @@ func (s *KeyStorage) GetAccount(ctx context.Context, addr string) (*accounts.Acc
 	}
 	add, err := s.storage.Find(query)
 	if err != nil {
-		if err.Error() == "no key for given address or file" {
+		if errors.Is(err, keystore.ErrNoMatch) {
 			return nil, wallet.ErrNotFound
 		}
 		return nil, err
