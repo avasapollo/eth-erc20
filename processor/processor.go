@@ -4,7 +4,7 @@ import (
 	"context"
 	"math/big"
 
-	erc20 "github.com/avasapollo/eth-erc20/gen"
+	"github.com/avasapollo/eth-erc20/gen/go/erc20"
 	"github.com/ethereum/go-ethereum/accounts"
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
 	"github.com/ethereum/go-ethereum/accounts/keystore"

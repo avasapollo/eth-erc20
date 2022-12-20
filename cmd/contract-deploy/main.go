@@ -5,7 +5,7 @@ import (
 	"math/big"
 
 	"github.com/avasapollo/eth-erc20/converter"
-	erc20 "github.com/avasapollo/eth-erc20/gen"
+	"github.com/avasapollo/eth-erc20/gen/go/erc20"
 	"github.com/avasapollo/eth-erc20/storage"
 	"github.com/avasapollo/eth-erc20/wallet"
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
