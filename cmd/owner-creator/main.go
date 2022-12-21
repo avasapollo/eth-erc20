@@ -10,7 +10,6 @@ import (
 )
 
 type config struct {
-	NetworkURL    string `envconfig:"NETWORK_URL"`
 	OwnerPassword string `envconfig:"OWNER_PASSWORD"`
 	OwnerBalance  int64  `envconfig:"OWNER_BALANCE"`
 	KeyDir        string `envconfig:"KEY_DIR"`
@@ -19,7 +18,7 @@ type config struct {
 func main() {
 	ctx := context.Background()
 	lgr := logrus.New().WithFields(logrus.Fields{
-		"app": "contract-deploy",
+		"app": "owner-creator",
 	})
 
 	c := new(config)
