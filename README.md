@@ -22,3 +22,5 @@ you can use/change the script that I added. You should see something like this.
 INFO[0001] owner address: 0x3F15cb553FAA92aD4fBde47E6CA727A4A0d49d85  app=owner-creator
 ```
 You should see a new file inside your accounts directory.
+
+WORK IN PROGRESS...
