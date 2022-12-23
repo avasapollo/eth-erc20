@@ -23,4 +23,82 @@ INFO[0001] owner address: 0x3F15cb553FAA92aD4fBde47E6CA727A4A0d49d85  app=owner-
 ```
 You should see a new file inside your accounts directory.
 
-WORK IN PROGRESS...
+## top up the owner
+To interact with the contract you need to make transactions, so you need eth on the EOAs.
+Let's top-up the owner because it will have the initial amount of the tokens.
+faucet app
+
+![img.png](images/img.png)
+
+or make directly a transaction from your test account
+
+![img_1.png](images/img_1.png)
+
+## contract-deploy
+We need to deploy the contract to the Ethereum test network, 
+This application require these env variables
+
+```
+export NETWORK_URL=https://eth-goerli.g.alchemy.com/v2/{id}         // network url
+export OWNER_ADDRESS=0x3F15cb553FAA92aD4fBde47E6CA727A4A0d49d85     // owner address that we have just created
+export OWNER_PASSWORD=password                                      // owner password
+export OWNER_BALANCE=1000000000000                                  // the amount of the tokens that you want to create
+                                                                    // they will be added to the owner account
+export KEY_DIR=./accounts                                           // keystorge directory
+```
+you can use/change the script that I added. You should see an output like this
+``
+➜  eth-erc20 git:(master) scripts/contract-deploy.sh
+INFO[0000] owner address: 0x3F15cb553FAA92aD4fBde47E6CA727A4A0d49d85  app=contract-deploy
+INFO[0001] contract deployed                             app=contract-deploy chan_id=5 contract_addr=0x0B990C7B7E31A02a4724847e27F69d990004674a owner_addr=0x3F15cb553FAA92aD4fBde47E6CA727A4A0d49d85 tr_hash=0x0c6b4bd54eba299d55c83c53473996e167980aeddf4ede38b5943332d97f4cf7 tr_price=0.000299998665
+``
+The contract is deployed on Ethereum test network on this address `0x0B990C7B7E31A02a4724847e27F69d990004674a`
+![img.png](images/img_3.png)
+
+## erc-20
+It's time to interact with our contract.
+Let's run the erc-20 application that need these envs
+```
+export NETWORK_URL=https://eth-goerli.g.alchemy.com/v2/{id}
+export OWNER_ADDRESS=0x3F15cb553FAA92aD4fBde47E6CA727A4A0d49d85
+export OWNER_PASSWORD=password
+export OWNER_BALANCE=1000000000000
+export KEY_DIR=./accounts
+export CONTRACT_ADDRESS=0x0B990C7B7E31A02a4724847e27F69d990004674a
+```
+You can use/change the script that I added. You should see an output like this
+
+```
+➜  eth-erc20 git:(master) ✗ scripts/erc-20.sh
+INFO[0000] application startedaddr[::]:50051             app=erc-20
+```
+The application is listening on port `50051`, it use buf-connect.
+To interact with the application I use GRPC with BloomRPC, you can find the proto definitions inside the proto folder.
+
+First thing let's get the balance of the owner (it should contain all the tokens)
+![img.png](images/img_10.png)
+
+Here we are, all the tokens are there.
+
+Before to make a transfer, let's create a second account to the wallet
+
+![img_1.png](images/img_4.png)
+
+let's check the balance of the new account, it should 0
+
+![img_2.png](images/img_5.png)
+
+Perfect, let's make a transfer, remember that the accounts need to have enough eth to pay the gas.
+Sender is the owner the receiver it is the account that we have just created.
+
+![img_3.png](images/img_6.png)
+
+Perfect the transaction is made, the address inside the result is the transaction
+
+![img_4.png](images/img_7.png)
+
+You can see the eth gas price and the tokens that we have transferred 0.000000002 ND Coin (NDN)
+We can also check the transactions on the contract address
+![img_5.png](images/img_8.png)
+
+![img_6.png](images/img_9.png)
