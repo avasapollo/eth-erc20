@@ -64,8 +64,8 @@ func main() {
 	// create buyer wallet
 	buyer, err := walletSvc.CreateAccount(ctx, c.BuyerPassword)
 	if err != nil {
-		lgr.WithError(err).Fatal("can't create the delegate account")
+		lgr.WithError(err).Fatal("can't create the buyer account")
 	}
 
-	lgr.Infof("delegate address: %s", buyer.Address.Hex())
+	lgr.Infof("buyer address: %s", buyer.Address.Hex())
 }
