@@ -1,13 +1,13 @@
 // SPDX-License-Identifier: GPL-3.0
 pragma solidity >=0.7.0 <0.9.0;
 
-contract CoinERC20 {
+contract VasaCoinERC20 {
 
     event Transfer(address indexed from, address indexed to, uint tokens);
     event Approval(address indexed tokenOwner, address indexed spender, uint tokens);
 
-    string public name = "ND Coin";
-    string public symbol = "NDN";
+    string private constant name = "Vasa Coin";
+    string private constant symbol = "vasa";
     uint8 public constant decimals = 18;
 
     mapping(address => uint256) balances;
@@ -16,10 +16,8 @@ contract CoinERC20 {
 
     uint256 totalSupply_;
 
-    constructor(uint256 total,string memory name_,string memory symbol_) {
+    constructor(uint256 total) {
         totalSupply_ = total;
-        name = name_;
-        symbol = symbol_;
         balances[msg.sender] = totalSupply_;
     }
 

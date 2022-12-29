@@ -20,10 +20,7 @@ type config struct {
 	OwnerAddress  string `envconfig:"OWNER_ADDRESS"`
 	OwnerPassword string `envconfig:"OWNER_PASSWORD"`
 	OwnerBalance  int64  `envconfig:"OWNER_BALANCE"`
-	TokenName     string `envconfig:"TOKEN_NAME"`
-	TokenSymbol   string `envconfig:"TOKEN_SYMBOL"`
-
-	KeyDir string `envconfig:"KEY_DIR"`
+	KeyDir        string `envconfig:"KEY_DIR"`
 }
 
 func main() {
@@ -87,7 +84,7 @@ func main() {
 	auth.GasLimit = 3000000
 	auth.Nonce = big.NewInt(int64(nonce))
 
-	conAddr, tr, _, err := erc20.DeployErc20(auth, client, big.NewInt(c.OwnerBalance), c.TokenName, c.TokenSymbol)
+	conAddr, tr, _, err := erc20.DeployErc20(auth, client, big.NewInt(c.OwnerBalance))
 	if err != nil {
 		lgr.WithError(err).Fatal("can't create auth request to deploy contract")
 	}

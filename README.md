@@ -44,8 +44,6 @@ This application require these env variables
 
 ```
 export NETWORK_URL=https://eth-goerli.g.alchemy.com/v2/{id}         // network url
-export TOKEN_NAME=vasa                                              // token name
-export TOKEN_SYMBOL=vsa                                             // token symbol
 export OWNER_ADDRESS=0x3F15cb553FAA92aD4fBde47E6CA727A4A0d49d85     // owner address that we have just created
 export OWNER_PASSWORD=password                                      // owner password
 export OWNER_BALANCE=1000000000000                                  // the amount of the tokens that you want to create
