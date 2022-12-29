@@ -12,6 +12,8 @@ import (
 	"github.com/ethereum/go-ethereum/ethclient"
 )
 
+const gasLimit = 3000000
+
 type Wallet interface {
 	GetAccount(ctx context.Context, addr string) (*accounts.Account, error)
 	GetKey(ctx context.Context, addr, password string) (*keystore.Key, error)
@@ -79,7 +81,7 @@ func (p *Processor) Transfer(ctx context.Context, req *TransferParams) (*Transfe
 	if err != nil {
 		return nil, err
 	}
-	transactorOpt.GasLimit = 3000000
+	transactorOpt.GasLimit = gasLimit
 	transactorOpt.GasPrice = gasPrice
 
 	tr, err := p.ctrClient.Transfer(transactorOpt, receiverAddr, req.Amount)
@@ -137,7 +139,7 @@ func (p *Processor) Approve(ctx context.Context, req *ApproveParams) (*ApproveRe
 	if err != nil {
 		return nil, err
 	}
-	transactorOpt.GasLimit = 3000000
+	transactorOpt.GasLimit = gasLimit
 	transactorOpt.GasPrice = gasPrice
 
 	tr, err := p.ctrClient.Approve(transactorOpt, delegateAddr, req.Amount)
@@ -206,7 +208,7 @@ func (p *Processor) TransferFrom(ctx context.Context, req *TransferFromParams) (
 	if err != nil {
 		return nil, err
 	}
-	transactorOpt.GasLimit = 3000000
+	transactorOpt.GasLimit = gasLimit
 	transactorOpt.GasPrice = gasPrice
 
 	tr, err := p.ctrClient.TransferFrom(transactorOpt, ownerAddr, buyerAddr, req.Amount)
