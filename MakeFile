@@ -2,7 +2,7 @@ build-contract:
 	solc --bin --abi contracts/erc20.sol -o build
 
 abigen-contract:
-	abigen --bin=build/NDCoinERC20.bin --abi=build/NDCoinERC20.abi --pkg=erc20 --out=gen/go/erc20/erc20.go
+	abigen --bin=build/CoinERC20.bin --abi=build/CoinERC20.abi --pkg=erc20 --out=gen/go/erc20/erc20.go
 
 
 buf-mod-update:
