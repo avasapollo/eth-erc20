@@ -9,7 +9,6 @@ import (
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
 	"github.com/ethereum/go-ethereum/accounts/keystore"
 	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/crypto"
 	"github.com/ethereum/go-ethereum/ethclient"
 )
 
@@ -99,14 +98,7 @@ type GetBalanceResult struct {
 }
 
 func (p *Processor) GetBalance(ctx context.Context, address string) (*GetBalanceResult, error) {
-	ownerKey, err := p.wallet.GetKey(ctx, p.ownerAddr.Hex(), p.ownerPassword)
-	if err != nil {
-		return nil, err
-	}
-
-	opt := &bind.CallOpts{
-		From: crypto.PubkeyToAddress(ownerKey.PrivateKey.PublicKey),
-	}
+	opt := &bind.CallOpts{}
 
 	res, err := p.ctrClient.BalanceOf(opt, common.HexToAddress(address))
 	if err != nil {
@@ -114,5 +106,117 @@ func (p *Processor) GetBalance(ctx context.Context, address string) (*GetBalance
 	}
 	return &GetBalanceResult{
 		Amount: res.Int64(),
+	}, nil
+}
+
+type ApproveParams struct {
+	OwnerAddr     string
+	OwnerPassword string
+	DelegateAddr  string
+	Amount        *big.Int
+}
+
+type ApproveResult struct {
+	TransactionHex string
+}
+
+func (p *Processor) Approve(ctx context.Context, req *ApproveParams) (*ApproveResult, error) {
+	ownerKey, err := p.wallet.GetKey(ctx, p.ownerAddr.Hex(), p.ownerPassword)
+	if err != nil {
+		return nil, err
+	}
+
+	delegateAddr := common.HexToAddress(req.DelegateAddr)
+
+	gasPrice, err := p.client.SuggestGasPrice(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	transactorOpt, err := bind.NewKeyedTransactorWithChainID(ownerKey.PrivateKey, p.chanID)
+	if err != nil {
+		return nil, err
+	}
+	transactorOpt.GasLimit = 3000000
+	transactorOpt.GasPrice = gasPrice
+
+	tr, err := p.ctrClient.Approve(transactorOpt, delegateAddr, req.Amount)
+	if err != nil {
+		return nil, err
+	}
+	return &ApproveResult{
+		TransactionHex: tr.Hash().Hex(),
+	}, nil
+}
+
+type AllowanceParams struct {
+	OwnerAddr    string
+	DelegateAddr string
+}
+
+type AllowanceResult struct {
+	OwnerAddr    string
+	DelegateAddr string
+	Amount       int64
+}
+
+func (p *Processor) Allowance(ctx context.Context, req *AllowanceParams) (*AllowanceResult, error) {
+	opt := &bind.CallOpts{}
+	res, err := p.ctrClient.Allowance(opt, common.HexToAddress(req.OwnerAddr), common.HexToAddress(req.DelegateAddr))
+	if err != nil {
+		return nil, err
+	}
+	return &AllowanceResult{
+		OwnerAddr:    req.OwnerAddr,
+		DelegateAddr: req.DelegateAddr,
+		Amount:       res.Int64(),
+	}, nil
+}
+
+type TransferFromParams struct {
+	DelegateAddr     string
+	DelegatePassword string
+	OwnerAddr        string
+	BuyerAddr        string
+	Amount           *big.Int
+}
+
+type TransferFromResult struct {
+	TransactionHex string
+	DelegateAddr   string
+	OwnerAddr      string
+	BuyerAddr      string
+}
+
+func (p *Processor) TransferFrom(ctx context.Context, req *TransferFromParams) (*TransferFromResult, error) {
+	delegteKey, err := p.wallet.GetKey(ctx, req.DelegateAddr, req.DelegatePassword)
+	if err != nil {
+		return nil, err
+	}
+
+	ownerAddr := common.HexToAddress(req.OwnerAddr)
+	buyerAddr := common.HexToAddress(req.BuyerAddr)
+
+	gasPrice, err := p.client.SuggestGasPrice(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	transactorOpt, err := bind.NewKeyedTransactorWithChainID(delegteKey.PrivateKey, p.chanID)
+	if err != nil {
+		return nil, err
+	}
+	transactorOpt.GasLimit = 3000000
+	transactorOpt.GasPrice = gasPrice
+
+	tr, err := p.ctrClient.TransferFrom(transactorOpt, ownerAddr, buyerAddr, req.Amount)
+	if err != nil {
+		return nil, err
+	}
+	return &TransferFromResult{
+		TransactionHex: tr.Hash().Hex(),
+		DelegateAddr:   req.DelegateAddr,
+		OwnerAddr:      req.OwnerAddr,
+		BuyerAddr:      req.BuyerAddr,
 	}, nil
 }

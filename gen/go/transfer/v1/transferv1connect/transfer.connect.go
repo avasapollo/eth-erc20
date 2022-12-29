@@ -28,6 +28,9 @@ const (
 // TransferServiceClient is a client for the transfer.v1.TransferService service.
 type TransferServiceClient interface {
 	Transfer(context.Context, *connect_go.Request[v1.TransferReq]) (*connect_go.Response[v1.TransferResp], error)
+	Approve(context.Context, *connect_go.Request[v1.ApproveReq]) (*connect_go.Response[v1.ApproveResp], error)
+	Allowance(context.Context, *connect_go.Request[v1.AllowanceReq]) (*connect_go.Response[v1.AllowanceResp], error)
+	TransferFrom(context.Context, *connect_go.Request[v1.TransferFromReq]) (*connect_go.Response[v1.TransferFromResp], error)
 }
 
 // NewTransferServiceClient constructs a client for the transfer.v1.TransferService service. By
@@ -45,12 +48,30 @@ func NewTransferServiceClient(httpClient connect_go.HTTPClient, baseURL string, 
 			baseURL+"/transfer.v1.TransferService/Transfer",
 			opts...,
 		),
+		approve: connect_go.NewClient[v1.ApproveReq, v1.ApproveResp](
+			httpClient,
+			baseURL+"/transfer.v1.TransferService/Approve",
+			opts...,
+		),
+		allowance: connect_go.NewClient[v1.AllowanceReq, v1.AllowanceResp](
+			httpClient,
+			baseURL+"/transfer.v1.TransferService/Allowance",
+			opts...,
+		),
+		transferFrom: connect_go.NewClient[v1.TransferFromReq, v1.TransferFromResp](
+			httpClient,
+			baseURL+"/transfer.v1.TransferService/TransferFrom",
+			opts...,
+		),
 	}
 }
 
 // transferServiceClient implements TransferServiceClient.
 type transferServiceClient struct {
-	transfer *connect_go.Client[v1.TransferReq, v1.TransferResp]
+	transfer     *connect_go.Client[v1.TransferReq, v1.TransferResp]
+	approve      *connect_go.Client[v1.ApproveReq, v1.ApproveResp]
+	allowance    *connect_go.Client[v1.AllowanceReq, v1.AllowanceResp]
+	transferFrom *connect_go.Client[v1.TransferFromReq, v1.TransferFromResp]
 }
 
 // Transfer calls transfer.v1.TransferService.Transfer.
@@ -58,9 +79,27 @@ func (c *transferServiceClient) Transfer(ctx context.Context, req *connect_go.Re
 	return c.transfer.CallUnary(ctx, req)
 }
 
+// Approve calls transfer.v1.TransferService.Approve.
+func (c *transferServiceClient) Approve(ctx context.Context, req *connect_go.Request[v1.ApproveReq]) (*connect_go.Response[v1.ApproveResp], error) {
+	return c.approve.CallUnary(ctx, req)
+}
+
+// Allowance calls transfer.v1.TransferService.Allowance.
+func (c *transferServiceClient) Allowance(ctx context.Context, req *connect_go.Request[v1.AllowanceReq]) (*connect_go.Response[v1.AllowanceResp], error) {
+	return c.allowance.CallUnary(ctx, req)
+}
+
+// TransferFrom calls transfer.v1.TransferService.TransferFrom.
+func (c *transferServiceClient) TransferFrom(ctx context.Context, req *connect_go.Request[v1.TransferFromReq]) (*connect_go.Response[v1.TransferFromResp], error) {
+	return c.transferFrom.CallUnary(ctx, req)
+}
+
 // TransferServiceHandler is an implementation of the transfer.v1.TransferService service.
 type TransferServiceHandler interface {
 	Transfer(context.Context, *connect_go.Request[v1.TransferReq]) (*connect_go.Response[v1.TransferResp], error)
+	Approve(context.Context, *connect_go.Request[v1.ApproveReq]) (*connect_go.Response[v1.ApproveResp], error)
+	Allowance(context.Context, *connect_go.Request[v1.AllowanceReq]) (*connect_go.Response[v1.AllowanceResp], error)
+	TransferFrom(context.Context, *connect_go.Request[v1.TransferFromReq]) (*connect_go.Response[v1.TransferFromResp], error)
 }
 
 // NewTransferServiceHandler builds an HTTP handler from the service implementation. It returns the
@@ -75,6 +114,21 @@ func NewTransferServiceHandler(svc TransferServiceHandler, opts ...connect_go.Ha
 		svc.Transfer,
 		opts...,
 	))
+	mux.Handle("/transfer.v1.TransferService/Approve", connect_go.NewUnaryHandler(
+		"/transfer.v1.TransferService/Approve",
+		svc.Approve,
+		opts...,
+	))
+	mux.Handle("/transfer.v1.TransferService/Allowance", connect_go.NewUnaryHandler(
+		"/transfer.v1.TransferService/Allowance",
+		svc.Allowance,
+		opts...,
+	))
+	mux.Handle("/transfer.v1.TransferService/TransferFrom", connect_go.NewUnaryHandler(
+		"/transfer.v1.TransferService/TransferFrom",
+		svc.TransferFrom,
+		opts...,
+	))
 	return "/transfer.v1.TransferService/", mux
 }
 
@@ -83,4 +137,16 @@ type UnimplementedTransferServiceHandler struct{}
 
 func (UnimplementedTransferServiceHandler) Transfer(context.Context, *connect_go.Request[v1.TransferReq]) (*connect_go.Response[v1.TransferResp], error) {
 	return nil, connect_go.NewError(connect_go.CodeUnimplemented, errors.New("transfer.v1.TransferService.Transfer is not implemented"))
+}
+
+func (UnimplementedTransferServiceHandler) Approve(context.Context, *connect_go.Request[v1.ApproveReq]) (*connect_go.Response[v1.ApproveResp], error) {
+	return nil, connect_go.NewError(connect_go.CodeUnimplemented, errors.New("transfer.v1.TransferService.Approve is not implemented"))
+}
+
+func (UnimplementedTransferServiceHandler) Allowance(context.Context, *connect_go.Request[v1.AllowanceReq]) (*connect_go.Response[v1.AllowanceResp], error) {
+	return nil, connect_go.NewError(connect_go.CodeUnimplemented, errors.New("transfer.v1.TransferService.Allowance is not implemented"))
+}
+
+func (UnimplementedTransferServiceHandler) TransferFrom(context.Context, *connect_go.Request[v1.TransferFromReq]) (*connect_go.Response[v1.TransferFromResp], error) {
+	return nil, connect_go.NewError(connect_go.CodeUnimplemented, errors.New("transfer.v1.TransferService.TransferFrom is not implemented"))
 }

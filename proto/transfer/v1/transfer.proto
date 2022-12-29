@@ -4,6 +4,9 @@ package transfer.v1;
 
 service TransferService {
   rpc Transfer(TransferReq) returns (TransferResp);
+  rpc Approve(ApproveReq) returns (ApproveResp);
+  rpc Allowance(AllowanceReq) returns (AllowanceResp);
+  rpc TransferFrom(TransferFromReq) returns (TransferFromResp);
 }
 
 message TransferReq {
@@ -14,5 +17,37 @@ message TransferReq {
 }
 
 message TransferResp {
+  string address = 1;
+}
+
+message ApproveReq {
+  string owner_address = 1;
+  string owner_password = 2;
+  string delegate_address = 3;
+  int64 amount = 4;
+}
+
+message ApproveResp {
+  string address = 1;
+}
+
+message AllowanceReq {
+  string owner_address = 1;
+  string delegate_address = 2;
+}
+
+message AllowanceResp {
+  int64 amount = 1;
+}
+
+message TransferFromReq {
+  string delegate_address = 1;
+  string delegate_password = 2;
+  string owner_address = 3;
+  string buyer_address = 4;
+  int64 amount = 5;
+}
+
+message TransferFromResp {
   string address = 1;
 }
