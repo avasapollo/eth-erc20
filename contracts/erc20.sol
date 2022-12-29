@@ -6,9 +6,9 @@ contract VasaCoinERC20 {
     event Transfer(address indexed from, address indexed to, uint tokens);
     event Approval(address indexed tokenOwner, address indexed spender, uint tokens);
 
-    string private constant name = "Vasa Coin";
-    string private constant symbol = "vasa";
-    uint8 public constant decimals = 18;
+    string public constant name = "Vasa Coin";
+    string public constant symbol = "vasa";
+    uint8  public constant decimals = 18;
 
     mapping(address => uint256) balances;
 

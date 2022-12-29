@@ -86,6 +86,9 @@ func main() {
 			lgr.Fatal(err, "failed to start server")
 		}
 	}()
+
+	lgr.Infof("owner address: %s", c.OwnerAddress)
+	lgr.Infof("contract address: %s", c.ContractAddress)
 	lgr.Info("application started", "addr", srv.Addr())
 
 	// wait for shutdown

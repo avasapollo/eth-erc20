@@ -4,7 +4,6 @@ import (
 	"context"
 	"math/big"
 
-	"github.com/avasapollo/eth-erc20/converter"
 	"github.com/avasapollo/eth-erc20/gen/go/erc20"
 	"github.com/avasapollo/eth-erc20/storage"
 	"github.com/avasapollo/eth-erc20/wallet"
@@ -84,20 +83,9 @@ func main() {
 	auth.GasLimit = 3000000
 	auth.Nonce = big.NewInt(int64(nonce))
 
-	conAddr, tr, _, err := erc20.DeployErc20(auth, client, big.NewInt(c.OwnerBalance))
+	conAddr, _, _, err := erc20.DeployErc20(auth, client, big.NewInt(c.OwnerBalance))
 	if err != nil {
 		lgr.WithError(err).Fatal("can't create auth request to deploy contract")
 	}
-
-	trCost, _ := converter.FromWei(converter.Ether, tr.Cost())
-	lgr.WithFields(logrus.Fields{
-		"chan_id":       chanID,
-		"owner_addr":    owner.Address.Hex(),
-		"contract_addr": conAddr.Hex(),
-		"tr_price":      trCost,
-		"tr_hash":       tr.Hash().Hex(),
-	}).Info("contract deployed")
+	lgr.Infof("contract address: %s", conAddr.Hex())
 }
-
-// owner 0x86449faB366E4839487dc969adBaAd9b9b46dc65
-// contract address 0xe67CC61Be70789C548d19c0DedA6B622ccF6A9f1
