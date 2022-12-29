@@ -9,7 +9,6 @@ import (
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
 	"github.com/ethereum/go-ethereum/accounts/keystore"
 	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/crypto"
 	"github.com/ethereum/go-ethereum/ethclient"
 )
 
@@ -99,14 +98,7 @@ type GetBalanceResult struct {
 }
 
 func (p *Processor) GetBalance(ctx context.Context, address string) (*GetBalanceResult, error) {
-	ownerKey, err := p.wallet.GetKey(ctx, p.ownerAddr.Hex(), p.ownerPassword)
-	if err != nil {
-		return nil, err
-	}
-
-	opt := &bind.CallOpts{
-		From: crypto.PubkeyToAddress(ownerKey.PrivateKey.PublicKey),
-	}
+	opt := &bind.CallOpts{}
 
 	res, err := p.ctrClient.BalanceOf(opt, common.HexToAddress(address))
 	if err != nil {
@@ -169,14 +161,6 @@ type AllowanceResult struct {
 }
 
 func (p *Processor) Allowance(ctx context.Context, req *AllowanceParams) (*AllowanceResult, error) {
-	//ownerKey, err := p.wallet.GetKey(ctx, p.ownerAddr.Hex(), p.ownerPassword)
-	//if err != nil {
-	//	return nil, err
-	//}
-	//
-	//opt := &bind.CallOpts{
-	//	From: crypto.PubkeyToAddress(ownerKey.PrivateKey.PublicKey),
-	//}
 	opt := &bind.CallOpts{}
 	res, err := p.ctrClient.Allowance(opt, common.HexToAddress(req.OwnerAddr), common.HexToAddress(req.DelegateAddr))
 	if err != nil {
