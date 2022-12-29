@@ -10,18 +10,22 @@ There are 3 applications:
 This application will create an EOA(Externally Owned Account). 
 You can find more clarification on the Ethereum account [here](https://ethereum.org/en/developers/docs/accounts/#types-of-account).
 We will use this account to deploy the contract, and it will be the owner of the DApp.
+The application also generate a receiver account, that you can use to receive the tokens in the test.
 The application require these env variables
+
 ```
 OWNER_PASSWORD=password                                 // password for the EOA account
 OWNER_BALANCE=1000000000000                             // the initial token balance of the owner
+RECEIVER_PASSWORD=password                                 // password for the EOA account
 KEY_DIR=./accounts                                      // where you want to store the accounts
 ```
 you can use/change the script that I added. You should see something like this.
 ```
 ➜  eth-erc20 git:(master) ./scripts/owner-creator.sh
 INFO[0001] owner address: 0x3F15cb553FAA92aD4fBde47E6CA727A4A0d49d85  app=owner-creator
+INFO[0003] receiver address: 0x84ED27AAA638800Ac84B1106d0e2c3471833dA6D  app=owner-creator
 ```
-You should see a new file inside your accounts directory.
+You should see a new files inside your account directory.
 
 ## top up the owner
 To interact with the contract you need to make transactions, so you need eth on the EOAs.

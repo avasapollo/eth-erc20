@@ -10,9 +10,10 @@ import (
 )
 
 type config struct {
-	OwnerPassword string `envconfig:"OWNER_PASSWORD"`
-	OwnerBalance  int64  `envconfig:"OWNER_BALANCE"`
-	KeyDir        string `envconfig:"KEY_DIR"`
+	OwnerPassword    string `envconfig:"OWNER_PASSWORD"`
+	OwnerBalance     int64  `envconfig:"OWNER_BALANCE"`
+	ReceiverPassword string `envconfig:"RECEIVER_PASSWORD"`
+	KeyDir           string `envconfig:"KEY_DIR"`
 }
 
 func main() {
@@ -41,4 +42,12 @@ func main() {
 	}
 
 	lgr.Infof("owner address: %s", owner.Address.Hex())
+
+	// create receiver wallet
+	receiver, err := walletSvc.CreateAccount(ctx, c.OwnerPassword)
+	if err != nil {
+		lgr.WithError(err).Fatal("can't create the receiver account")
+	}
+
+	lgr.Infof("receiver address: %s", receiver.Address.Hex())
 }
