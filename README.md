@@ -6,24 +6,28 @@ There are 3 applications:
 - contract-deploy: it deploys the contract to Ethereum network
 - erc-20: it exposes GRPC/REST endpoint to interact with the DApp
 
-## owner-creator
-This application will create an EOA(Externally Owned Account). 
+## eoa-creator
+This application will create EOAs(Externally Owned Account). 
 You can find more clarification on the Ethereum account [here](https://ethereum.org/en/developers/docs/accounts/#types-of-account).
-We will use this account to deploy the contract, and it will be the owner of the DApp.
-The application also generate a receiver account, that you can use to receive the tokens in the test.
+We will use the owner account to deploy the contract, and it will be the owner of the DApp.
+The application also generate a receiver, delegate and buyer account to test the rest of the functionallities.
 The application require these env variables
 
 ```
 OWNER_PASSWORD=password                                 // password for the EOA account
 OWNER_BALANCE=1000000000000                             // the initial token balance of the owner
-RECEIVER_PASSWORD=password                                 // password for the EOA account
+RECEIVER_PASSWORD=password                              // password for the EOA account
+DELEGATE_PASSWORD=password                              // password for the EOA account
+BUYER_PASSWORD=password                                 // password for the EOA account
 KEY_DIR=./accounts                                      // where you want to store the accounts
 ```
 you can use/change the script that I added. You should see something like this.
 ```
 ➜  eth-erc20 git:(master) ./scripts/owner-creator.sh
-INFO[0001] owner address: 0x3F15cb553FAA92aD4fBde47E6CA727A4A0d49d85  app=owner-creator
-INFO[0003] receiver address: 0x84ED27AAA638800Ac84B1106d0e2c3471833dA6D  app=owner-creator
+INFO[0001] owner address: 0xA58b122cea87Bb37f42FB28A9a42F60DDbcB9446  app=eoa-creator
+INFO[0003] receiver address: 0x2210fb9B3dF46Bc3C57352Efee192FB2dEfD2F91  app=eoa-creator
+INFO[0004] delegate address: 0x14c5063C644Efd9314E0cf7661A07D9CBA553d5a  app=eoa-creator
+INFO[0005] buyer address: 0x14c5063C644Efd9314E0cf7661A07D9CBA553d5a  app=eoa-creator
 ```
 You should see a new files inside your account directory.
 
