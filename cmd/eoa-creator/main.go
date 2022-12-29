@@ -13,13 +13,15 @@ type config struct {
 	OwnerPassword    string `envconfig:"OWNER_PASSWORD"`
 	OwnerBalance     int64  `envconfig:"OWNER_BALANCE"`
 	ReceiverPassword string `envconfig:"RECEIVER_PASSWORD"`
+	DelegatePassword string `envconfig:"DELEGATE_PASSWORD"`
+	BuyerPassword    string `envconfig:"BUYER_PASSWORD"`
 	KeyDir           string `envconfig:"KEY_DIR"`
 }
 
 func main() {
 	ctx := context.Background()
 	lgr := logrus.New().WithFields(logrus.Fields{
-		"app": "owner-creator",
+		"app": "eoa-creator",
 	})
 
 	c := new(config)
@@ -50,4 +52,20 @@ func main() {
 	}
 
 	lgr.Infof("receiver address: %s", receiver.Address.Hex())
+
+	// create delegate wallet
+	delegate, err := walletSvc.CreateAccount(ctx, c.DelegatePassword)
+	if err != nil {
+		lgr.WithError(err).Fatal("can't create the delegate account")
+	}
+
+	lgr.Infof("delegate address: %s", delegate.Address.Hex())
+
+	// create buyer wallet
+	buyer, err := walletSvc.CreateAccount(ctx, c.BuyerPassword)
+	if err != nil {
+		lgr.WithError(err).Fatal("can't create the delegate account")
+	}
+
+	lgr.Infof("delegate address: %s", buyer.Address.Hex())
 }
