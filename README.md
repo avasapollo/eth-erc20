@@ -55,11 +55,11 @@ export OWNER_BALANCE=1000000000000                                  // the amoun
 export KEY_DIR=./accounts                                           // keystorge directory
 ```
 you can use/change the script that I added. You should see an output like this
-``
+```
 ➜  eth-erc20 git:(master) scripts/contract-deploy.sh
 INFO[0000] owner address: 0x3F15cb553FAA92aD4fBde47E6CA727A4A0d49d85  app=contract-deploy
 INFO[0001] contract deployed                             app=contract-deploy chan_id=5 contract_addr=0x0B990C7B7E31A02a4724847e27F69d990004674a owner_addr=0x3F15cb553FAA92aD4fBde47E6CA727A4A0d49d85 tr_hash=0x0c6b4bd54eba299d55c83c53473996e167980aeddf4ede38b5943332d97f4cf7 tr_price=0.000299998665
-``
+```
 The contract is deployed on Ethereum test network on this address `0x0B990C7B7E31A02a4724847e27F69d990004674a`
 ![img.png](images/img_3.png)
 
