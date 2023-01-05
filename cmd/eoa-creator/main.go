@@ -11,7 +11,6 @@ import (
 
 type config struct {
 	OwnerPassword    string `envconfig:"OWNER_PASSWORD"`
-	OwnerBalance     int64  `envconfig:"OWNER_BALANCE"`
 	ReceiverPassword string `envconfig:"RECEIVER_PASSWORD"`
 	DelegatePassword string `envconfig:"DELEGATE_PASSWORD"`
 	BuyerPassword    string `envconfig:"BUYER_PASSWORD"`

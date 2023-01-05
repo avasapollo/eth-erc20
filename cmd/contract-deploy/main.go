@@ -83,9 +83,10 @@ func main() {
 	auth.GasLimit = 3000000
 	auth.Nonce = big.NewInt(int64(nonce))
 
-	conAddr, _, _, err := erc20.DeployErc20(auth, client, big.NewInt(c.OwnerBalance))
+	conAddr, tr, _, err := erc20.DeployErc20(auth, client, big.NewInt(c.OwnerBalance))
 	if err != nil {
 		lgr.WithError(err).Fatal("can't create auth request to deploy contract")
 	}
 	lgr.Infof("contract address: %s", conAddr.Hex())
+	lgr.Infof("transaction: %s", tr.Hash().Hex())
 }
